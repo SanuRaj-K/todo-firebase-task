@@ -4,9 +4,9 @@ import Landing from "./Pages/Landing";
 
 function App() {
   return (
-    <div className="">
-      {/* <Landing /> */}
-      <Home />
+    <div className="max-w-screen-2xl mx-auto">
+      <Landing />
+      {/* <Home /> */}
     </div>
   );
 }

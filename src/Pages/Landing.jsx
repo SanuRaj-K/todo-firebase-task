@@ -5,12 +5,10 @@ import TopLight from "../Assets/Images/chandelier with green round lampshade.png
 import Button from "../Components/Button";
 function Landing() {
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen  w-full overflow-hidden   ">
       <div className=" ml-7">
         <svg
-          className="  cursor-pointer"
-          width="44"
-          height="66"
+          className="  cursor-pointer sm:w-[44px] sm:h-[66px] w-[30px] h-[50px] mt-4 md:mt-0"
           viewBox="0 0 44 66"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,11 +19,11 @@ function Landing() {
           />
         </svg>
       </div>
-      <div className=" grid grid-cols-2 h-full    ">
-        <div className="   flex flex-col   items-center justify-center ">
-          <div className="   w-[500px] text-center">
-            <span className=" text-[33px] font-[500]">LOGIN</span>
-            <p className=" text-gray-500 text-[20px] py-3">
+      <div className=" grid md:grid-cols-2 h-full   w-full">
+        <div className="    flex flex-col   w-full    items-center mt-12 md:mt-0 md:justify-center ">
+          <div className=" sm:flex flex-col mx-4  text-center w-1/2 items-center   md:w-[500px] bg- md:text-center">
+            <span className=" text-[33px]  font-[500]">LOGIN</span>
+            <p className=" text-gray-500 text-center md:text-[20px] py-3">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquet
               at eleifend feugiat vitae faucibus nibh dolor dui. Lorem ipsum
               dolor sit amet, consectetur adipiscing elit. Aliquet at eleifend
@@ -35,7 +33,7 @@ function Landing() {
           </div>
         </div>
 
-        <div className="  h-full relative">
+        <div className="  h-full relative hidden md:block">
           <div className="absolute -top-[290px]  -right-[170px]">
             <img src={Rectangle} alt="Client" width={1600} className="" />
             <div className=" absolute top-[240px] left-[220px]">

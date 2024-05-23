@@ -4,8 +4,8 @@ import Button from "../Components/Button";
 function Home() {
   const [showMenu, setShowmenu] = useState(false);
   return (
-    <div className=" sm:bg-blue-400 md:bg-red-300 lg:bg-green-400">
-      <div className=" grid lg:grid-cols-2 mt-10 mx-9   h-screen ">
+    <div className=" sm:bg-blue-400 md:bg-red-300 lg:bg-green-400 ">
+      <div className=" grid lg:grid-cols-2 mt-10 mx-6   h-screen ">
         <div className="  ">
           <div>
             {" "}
