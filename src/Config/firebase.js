@@ -2,15 +2,14 @@ import { initializeApp } from "firebase/app";
 
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
 const firebaseConfig = {
-  apiKey: "AIzaSyDsnDF0BmwDVCDV1GxTpOVMV7BS4rCNVgg",
-  authDomain: "todo-40fda.firebaseapp.com",
-  projectId: "todo-40fda",
-  storageBucket: "todo-40fda.appspot.com",
-  messagingSenderId: "71702888407",
-  appId: "1:71702888407:web:52b473a431cd64b1545592",
-  measurementId: "G-9XCPT80RGF",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSEGE_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

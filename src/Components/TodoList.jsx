@@ -11,7 +11,6 @@ function TodoList({
   closeMenu,
   filterData,
   setTodoList,
-  todoList,
 }) {
   const handleDelete = async (id) => {
     try {

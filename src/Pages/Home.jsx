@@ -103,9 +103,9 @@ function Home() {
     );
     toast.success(`filtered by ${e.target.value}`, { id: toastId });
     setFilterData(filterd);
-    console.log(filterd);
-    setFilterTitle(e.target.value);
+     setFilterTitle(e.target.value);
   };
+console.log(process.env);
 
   return (
     <div className="">
