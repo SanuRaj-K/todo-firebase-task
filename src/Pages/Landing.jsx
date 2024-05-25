@@ -13,6 +13,8 @@ function Landing({ setUser }) {
     try {
       await signInWithPopup(auth, googleProvider).then((result) => {
         setUser(result.user);
+        const user= JSON.stringify(result.user)
+        localStorage.setItem("user", user);
         toast.success("Signin Successfull");
         history("/home");
       });

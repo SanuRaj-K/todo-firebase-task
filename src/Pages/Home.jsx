@@ -1,10 +1,4 @@
-import {
-  getDocs,
-  collection,
-  addD,
-  getDocsoc,
-  addDoc,
-} from "firebase/firestore";
+import { getDocs, collection, addDoc } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { auth, db } from "../Config/firebase";
@@ -12,23 +6,29 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import TodoList from "../Components/TodoList";
 
-function Home({ user }) {
+function Home() {
   const history = useNavigate();
   const [showMenu, setShowmenu] = useState(null);
   const [title, setTitle] = useState("");
-  const logeduser = auth?.currentUser?.email;
+  const [filterTitle, setFilterTitle] = useState("");
   const [description, setDescription] = useState("");
   const [todoList, setTodoList] = useState([]);
   const closeMenu = useRef(null);
+  const mainUser = localStorage.getItem("user");
+  const parsedMainUser = JSON.parse(mainUser);
+  const [filterData, setFilterData] = useState([]);
   const collectionRef = collection(db, "todo");
 
   const getTodoList = async () => {
+    const toastId = toast.loading("loading...");
     try {
       const data = await getDocs(collectionRef);
       const filter = data.docs
         .map((doc) => ({ ...doc.data(), id: doc.id }))
-        .filter((item) => item.userid === logeduser);
+        .filter((item) => item.userid === parsedMainUser.email);
+      toast.success("Success", { id: toastId });
       setTodoList(filter);
+      setFilterData(filter);
     } catch (err) {
       console.log(err);
     }
@@ -65,7 +65,7 @@ function Home({ user }) {
           title: title,
           description: description,
           status: "true",
-          userid: logeduser,
+          userid: parsedMainUser.email,
         });
         getTodoList();
       } catch (error) {
@@ -82,6 +82,7 @@ function Home({ user }) {
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
+        localStorage.clear();
         toast.success("Logout Success");
         history("/");
       })
@@ -89,9 +90,26 @@ function Home({ user }) {
         console.error(error);
       });
   };
+  const selectFilter = (e) => {
+    const toastId = toast.loading("loading...");
+
+    if (e.target.value === "Filterby") {
+      toast.success("all list", { id: toastId });
+      setFilterTitle("All");
+      return setFilterData(todoList);
+    }
+    const filterd = todoList.filter(
+      (item) => item.status.toLowerCase() === e.target.value.toLowerCase()
+    );
+    toast.success(`filtered by ${e.target.value}`, { id: toastId });
+    setFilterData(filterd);
+    console.log(filterd);
+    setFilterTitle(e.target.value);
+  };
+
   return (
     <div className="">
-      {user ? (
+      {parsedMainUser ? (
         <div className=" grid lg:grid-cols-2 mt-10 mx-6   h-screen ">
           <div className="  ">
             <div>
@@ -180,20 +198,37 @@ function Home({ user }) {
                 </svg>
               </div>
               <div className="border-[#D9D9D9] py-[5px] border px-[12px]">
-                <select name="Filterby" id="Filterby" className=" outline-none">
+                <select
+                  onChange={(e) => selectFilter(e)}
+                  name="Filterby"
+                  id="Filterby"
+                  className=" outline-none"
+                >
                   <option value="Filterby">Filterby</option>
                   <option value="Completed">Completed</option>
-                  <option value="Favourite">Favourite</option>
-                  <option value="Deleted">Deleted</option>
+                  <option value="favourite">favourite</option>
+                  <option value="Delete">Delete</option>
                 </select>
               </div>
             </div>
+            {/* {filterData.length < 1 ? (
+              <div>add your tasks</div>
+            ) : ( */}
             <div className=" flex justify-between flex-col px-3 items-center mt-28 w-full">
-              {todoList?.map((item) => (
-                <div className=" w-full">
+              <div>
+                {filterTitle ? (
+                  <div className=" mb-8">
+                    Filtered By{" "}
+                    <span className=" text-blue-800">{filterTitle}</span>{" "}
+                  </div>
+                ) : null}
+              </div>
+              {filterData?.map((item) => (
+                <div key={item.id} className=" w-full">
                   <TodoList
                     item={item}
                     closeMenu={closeMenu}
+                    filterData={filterData}
                     todoList={todoList}
                     showMenu={showMenu}
                     setShowmenu={setShowmenu}
@@ -203,10 +238,11 @@ function Home({ user }) {
                 </div>
               ))}
             </div>
+            {/* )} */}
           </div>
         </div>
       ) : (
-        <div>login</div>
+        history("/")
       )}
     </div>
   );

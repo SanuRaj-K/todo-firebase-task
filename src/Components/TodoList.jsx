@@ -1,4 +1,4 @@
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import React from "react";
 import { db } from "../Config/firebase";
 import toast from "react-hot-toast";
@@ -6,19 +6,54 @@ import toast from "react-hot-toast";
 function TodoList({
   item,
   showMenu,
+  setShowmenu,
   toggleMenu,
   closeMenu,
+  filterData,
   setTodoList,
   todoList,
 }) {
   const handleDelete = async (id) => {
     try {
       const deleteTodo = doc(db, "todo", id);
-      await deleteDoc(deleteTodo);
-      const data = todoList.filter((item) => item.id !== id);
-      console.log(data);
+
+      await updateDoc(deleteTodo, {
+        status: "delete",
+      });
+      const data = filterData.filter((item) => item.id !== id);
       setTodoList(data);
-      toast.remove('Deleted..!')
+      setShowmenu(false);
+      toast.success("Deleted..!");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleFavourite = async (id) => {
+    try {
+      const deleteTodo = doc(db, "todo", id);
+
+      await updateDoc(deleteTodo, {
+        status: "favourite",
+      });
+      const data = filterData.filter((item) => item.id !== id);
+      setTodoList(data);
+      setShowmenu(false);
+      toast.success("Favourited..!");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleComplete = async (id) => {
+    try {
+      const deleteTodo = doc(db, "todo", id);
+
+      await updateDoc(deleteTodo, {
+        status: "completed",
+      });
+      const data = filterData.filter((item) => item.id !== id);
+      setTodoList(data);
+      setShowmenu(false);
+      toast.success("Completed..!");
     } catch (err) {
       console.log(err);
     }
@@ -33,6 +68,7 @@ function TodoList({
               {item.description}{" "}
             </span>
           </div>
+
           <div>
             <svg
               onClick={() => toggleMenu(item.id)}
@@ -53,6 +89,7 @@ function TodoList({
         </div>
         <hr className=" mt-2" />
       </div>
+
       <div>
         {showMenu === item.id ? (
           <div
@@ -60,8 +97,18 @@ function TodoList({
             className="inline-flex bg-slate-300  absolute right-0 top-[240px]
                flex-col text-[14px]  font-[400] W-[220px] mt-2 shadow-md px-3 py-2  cursor-pointer "
           >
-            <span className=" hover:bg-[#F5F5F5]  w-full ">Completed</span>
-            <span className=" my-2 hover:bg-[#F5F5F5]">Favourite</span>
+            <span
+              onClick={() => handleComplete(item.id)}
+              className=" hover:bg-[#F5F5F5]  w-full "
+            >
+              Completed
+            </span>
+            <span
+              onClick={() => handleFavourite(item.id)}
+              className=" my-2 hover:bg-[#F5F5F5]"
+            >
+              Favourite
+            </span>
             <span
               onClick={() => handleDelete(item.id)}
               className="hover:bg-[#F5F5F5]"
